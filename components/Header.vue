@@ -11,10 +11,12 @@ h1 {
 }
 
 header {
-  padding: 1em 0;
+  padding: 1em;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #dc0a2d;
+  color: white;
 }
 
 </style>

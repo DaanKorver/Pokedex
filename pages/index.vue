@@ -1,9 +1,9 @@
 <template>
   <main>
-    <PokedexEntry v-for="(mon, index) in this.pokemon" :key="index" :id="mon.id" :name="mon.name" />
+    <ul>
+      <PokedexEntry v-for="(mon, index) in this.pokemon" :key="index" :id="mon.id" :name="mon.name" :types="mon.types" />
+    </ul>
     <infinite-loading :spinner="'spiral'" @infinite="this.infiteScroll">
-      <div slot="no-more">No more Pokémon</div>
-      <div slot="no-results">No more Pokémon</div>
       <div slot="spinner"><img class="spinner" src="~/static/spinner.svg" alt="pokeball"></div>
     </infinite-loading>
   </main>
@@ -41,7 +41,6 @@ export default {
       const request = await this.$axios.get(this.next)
       this.next = request.data.next ? request.data.next : false
       const pokemon = request.data.results
-      console.log(pokemon);
       return pokemon
     },
     async fetchSinglePokemon(pokemonName) {
@@ -53,11 +52,21 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .infinite-loading-container {
+    text-align: left !important;
+  }
+
   .spinner {
+    position: relative;
+    left: calc(50% - 2em);
     width: 4em;
     height: 4em;
     animation: spin 1s ease-in-out infinite;
+  }
+
+  ul {
+    padding: 0 1em;
   }
 
   @keyframes spin {
