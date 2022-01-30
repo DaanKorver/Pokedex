@@ -1,7 +1,7 @@
 <template>
   <section>
     <header v-bind:style="{backgroundColor : backgroundColor}">
-      <img :src="this.sprite" alt="">
+      <img ref="pokemon" :src="this.sprite" alt="">
     </header>
   </section>
 </template>
@@ -55,6 +55,7 @@
   header {
     height: 25vh;
     position: relative;
+    background: transparent;
   }
   img {
     width: 10em;
@@ -62,6 +63,6 @@
     position: absolute;
     left: 50%;
     bottom: 0;
-    transform: translateX(-50%) translateY(20%);
+    transform: translateX(-50%);
   }
 </style>

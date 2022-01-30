@@ -1,5 +1,5 @@
 <template>
-  <li :class="this.name" ref="entry" v-bind:style="{backgroundColor : backgroundColor}" @click="$router.push(`/pokemon/${name}`)">
+  <li :class="[this.name, 'pokemon']" ref="entry" v-bind:style="[{backgroundColor : backgroundColor}, {top: top}]" @click="$router.push(`/pokemon/${name}`)">
     <div ref="info">
       <h2>{{ capitalizedName }}</h2>
       <p>#{{ id.toString().padStart(3, '0') }}</p>
@@ -13,9 +13,10 @@
 
 <script>
 export default {
-  props: ["id", "name", "types"],
+  props: ["id", "name", "types", "callback"],
   data: ()=>{
     return {
+      isMounted: false,
       spriteUrl: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/",
       colors: {
         grass: "#a9cf98",
@@ -48,22 +49,33 @@ export default {
     },
     backgroundColor: function() {
       return this.colors[this.types[0].type.name]
+    },
+    top: function() {
+      if(!this.isMounted) return
+      const height = this.$refs.entry.getClientRects()[0].height
+      const top = ((this.id - 1) * 16) + (height * (this.id - 1))
+      return `${top}px`
     }
+  },
+  mounted: function() {
+    this.isMounted = true
   }
 };
 </script>
 
 <style scoped>
-  li {
+  li.pokemon {
     color: white;
     display: flex;
     border-radius: .5em;
     padding: .5em;
     align-items: center;
     justify-content: space-between;
-    position: relative;
-    margin: 1em 0;
-    background: lightgray;
+    position: absolute;
+    width: calc(100% - 2em);
+    left: 50%;
+    transform: translateX(-50%);
+    height: 115px;
   }
 
   div {
@@ -75,6 +87,8 @@ export default {
     width: 6em;
     height: 6em;
     object-fit: cover;
+    position: absolute;
+    right: .5em;
   }
 
   ul {
@@ -87,8 +101,6 @@ export default {
     background-color: rgba(0,0,0,.2);
     padding: .3em 1.3em;
     border-radius: 1em;
-    margin-bottom: 0;
-    width: auto;
   }
 
   .types > li:first-child {
